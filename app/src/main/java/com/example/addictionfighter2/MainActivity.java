@@ -2,9 +2,14 @@ package com.example.addictionfighter2;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.widget.Button;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
             );
             startActivity(usageStatsIntent);
         });
+
+        startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
 
     }
 

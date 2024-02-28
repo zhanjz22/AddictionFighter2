@@ -241,13 +241,4 @@ public class UsageStatsActivity extends Activity implements OnItemSelectedListen
     public void onNothingSelected(AdapterView<?> parent) {
         // do nothing
     }
-
-    private void requestPermissions() {
-        List<UsageStats> stats = mUsageStatsManager
-                .queryUsageStats(UsageStatsManager.INTERVAL_DAILY, 0, System.currentTimeMillis());
-        boolean isEmpty = stats.isEmpty();
-        if (isEmpty) {
-            startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
-        }
-    }
 }
