@@ -109,6 +109,10 @@ public class UsageStatsActivity extends Activity implements OnItemSelectedListen
 
                 // load application labels for each application
                 try {
+                    // BUG HERE
+                    /*
+                    -=-=--=-=-=-=-=-=-=-=-=-=--=-==--=-=-=-=-=-=-=-=
+                     */
                     ApplicationInfo appInfo = mPm.getApplicationInfo(pkgStats.getPackageName(), 0);
                     String label = appInfo.loadLabel(mPm).toString();
                     mAppLabelMap.put(pkgStats.getPackageName(), label);
@@ -122,6 +126,15 @@ public class UsageStatsActivity extends Activity implements OnItemSelectedListen
                     }
 
                 } catch (NameNotFoundException e) {
+                    // name not gotten, replaced "test" with package stats name
+                    mAppLabelMap.put(pkgStats.getPackageName(), pkgStats.getPackageName());
+                    UsageStats existingStats =
+                            map.get(pkgStats.getPackageName());
+                    if (existingStats == null) {
+                        map.put(pkgStats.getPackageName(), pkgStats);
+                    } else {
+                        existingStats.add(pkgStats);
+                    }
                     // This package may be gone.
                 }
             }
