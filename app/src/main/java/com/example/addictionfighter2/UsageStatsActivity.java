@@ -93,7 +93,7 @@ public class UsageStatsActivity extends Activity implements OnItemSelectedListen
 
         UsageStatsAdapter() {
             Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.DAY_OF_YEAR, -5);
+            cal.add(Calendar.DAY_OF_YEAR, -100);
 
             final List<UsageStats> stats =
                     mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST,
@@ -127,6 +127,7 @@ public class UsageStatsActivity extends Activity implements OnItemSelectedListen
 
                 } catch (NameNotFoundException e) {
                     // name not gotten, replaced "test" with package stats name
+                    //getPackageManager().getPackageInfo()
                     mAppLabelMap.put(pkgStats.getPackageName(), pkgStats.getPackageName());
                     UsageStats existingStats =
                             map.get(pkgStats.getPackageName());
