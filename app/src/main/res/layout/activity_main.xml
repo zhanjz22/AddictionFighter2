@@ -6,42 +6,53 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
         android:id="@+id/button_usage_stats"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="see screen time"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
+        android:text="stats"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/button_home" />
 
     <Button
         android:id="@+id/button_notify"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Notify me"
-        app:layout_constraintTop_toBottomOf="@+id/button_usage_stats"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_usage_stats"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_plan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Create a plan"
-        tools:layout_editor_absoluteX="161dp"
-        tools:layout_editor_absoluteY="284dp" />
+        android:text="Plans"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button_home"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/motivation"
+        android:layout_width="178dp"
+        android:layout_height="110dp"
+        android:layout_marginBottom="256dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/button_usage_stats"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_notify" />
+
+    <Button
+        android:id="@+id/button_home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Home"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button_usage_stats"
+        app:layout_constraintStart_toEndOf="@+id/button_plan" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
