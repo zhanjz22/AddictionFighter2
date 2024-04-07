@@ -24,6 +24,9 @@
 
         <activity
             android:name=".UsageStatsActivity" />
+        <activity android:name=".PlanCreate" />
+
+
     </application>
 
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"

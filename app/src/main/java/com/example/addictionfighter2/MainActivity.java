@@ -35,6 +35,17 @@ public class MainActivity extends AppCompatActivity {
             startActivity(usageStatsIntent);
         });
 
+        Button buttonPlan = findViewById(
+                R.id.button_plan
+        );
+        buttonPlan.setOnClickListener(view -> {
+            Intent planCreate = new Intent(
+                    getApplicationContext(), PlanCreate.class
+            );
+            startActivity(planCreate);
+        });
+
+
         Button buttonNotify = findViewById(R.id.button_notify);
 
         // Create an explicit intent for an Activity in your app.
