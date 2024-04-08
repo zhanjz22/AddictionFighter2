@@ -16,10 +16,18 @@ import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.os.Build;
+import androidx.core.app.ActivityCompat;
+import android.content.pm.PackageManager;
+import androidx.annotation.NonNull;
+import android.widget.Toast;
+
 import java.util.Random;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    private NotificationManagerCompat nmc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,50 +35,30 @@ public class MainActivity extends AppCompatActivity {
         createNotificationChannel();
         setContentView(R.layout.activity_main);
 
-        Button buttonUsageStats = findViewById(
-                R.id.button_usage_stats
-        );
+        nmc = NotificationManagerCompat.from(this);
+
+        Button buttonUsageStats = findViewById(R.id.button_usage_stats);
         buttonUsageStats.setOnClickListener(view -> {
-            Intent usageStatsIntent = new Intent(
-                    getApplicationContext(), UsageStatsActivity.class
-            );
+            Intent usageStatsIntent = new Intent(getApplicationContext(), UsageStatsActivity.class);
             startActivity(usageStatsIntent);
         });
 
-        Button buttonPlan = findViewById(
-                R.id.button_plan
-        );
+        Button buttonPlan = findViewById(R.id.button_plan);
         buttonPlan.setOnClickListener(view -> {
-            Intent planCreate = new Intent(
-                    getApplicationContext(), PlanCreate.class
-            );
+            Intent planCreate = new Intent(getApplicationContext(), PlanCreate.class);
             startActivity(planCreate);
         });
 
         Button buttonNotify = findViewById(R.id.button_notify);
-        buttonNotify.setVisibility(View.INVISIBLE);
-
-        // Create an explicit intent for an Activity in your app.
-        Intent intent = new Intent(this, UsageStatsActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "test_channel")
-                //.setSmallIcon(R.drawable.notification_icon)
-                .setContentTitle("My notification")
-                .setContentText("Hello World!")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                // Set the intent that fires when the user taps the notification.
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true);
-
-        NotificationManagerCompat nmc = NotificationManagerCompat.from(this);
-
         buttonNotify.setOnClickListener(view -> {
-            nmc.notify(0, builder.build());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
+                    return;
+                }
+            }
+            sendNotification();
         });
-
-        startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
 
         // Randomly select one of the messages
         Random random = new Random();
@@ -82,9 +70,36 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                sendNotification();
+            } else {
+                Toast.makeText(this, "Notification permission is required to send notifications", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private void sendNotification() {
+        // Create an explicit intent for an Activity in your app.
+        Intent intent = new Intent(this, UsageStatsActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "test_channel")
+                .setSmallIcon(android.R.drawable.ic_dialog_info) // Make sure to use a valid icon
+                .setContentTitle("My notification")
+                .setContentText("Hello World!")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+
+        nmc.notify(0, builder.build()); //permission is already checked before sendNotification is called
+    }
+
     private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is not in the Support Library.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "Testing";
             String description = "For testing of notifications";
@@ -93,8 +108,6 @@ public class MainActivity extends AppCompatActivity {
             channel.setDescription(description);
             channel.enableLights(true);
             channel.enableVibration(true);
-            // Register the channel with the system. You can't change the importance
-            // or other notification behaviors after this.
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
