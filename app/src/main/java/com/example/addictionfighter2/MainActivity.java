@@ -7,23 +7,18 @@ import androidx.core.app.NotificationManagerCompat;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.usage.UsageStats;
-import android.app.usage.UsageStatsManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.os.Build;
+
 import androidx.core.app.ActivityCompat;
 import android.content.pm.PackageManager;
 import androidx.annotation.NonNull;
 import android.widget.Toast;
 
 import java.util.Random;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button buttonPlan = findViewById(R.id.button_plan);
         buttonPlan.setOnClickListener(view -> {
-            Intent planCreate = new Intent(getApplicationContext(), PlanCreate.class);
+            Intent planCreate = new Intent(getApplicationContext(), SelectPlanActivity.class);
             startActivity(planCreate);
         });
 

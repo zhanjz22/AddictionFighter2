@@ -24,7 +24,7 @@
 
         <activity
             android:name=".UsageStatsActivity" />
-        <activity android:name=".PlanCreate" />
+        <activity android:name=".SelectPlanActivity" />
 
 
     </application>
