@@ -47,5 +47,7 @@
         android:maxLines="1"
         android:paddingEnd="6dip"
         android:paddingStart="12dip"
+        android:gravity="right"
+        android:textAlignment="gravity"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 </LinearLayout>
