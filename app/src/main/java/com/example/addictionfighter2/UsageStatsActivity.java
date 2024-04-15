@@ -107,6 +107,14 @@ public class UsageStatsActivity extends Activity implements OnItemSelectedListen
             for (int i = 0; i < statCount; i++) {
                 final android.app.usage.UsageStats pkgStats = stats.get(i);
 
+                if (pkgStats.getPackageName().startsWith("com.android")) {
+                    continue;
+                }
+
+                if (pkgStats.getTotalTimeInForeground() == 0) {
+                    continue;
+                }
+
                 // load application labels for each application
                 try {
                     // BUG HERE
