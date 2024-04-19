@@ -7,24 +7,48 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Day of the Week"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
     <Spinner
         android:id="@+id/day_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:entries="@array/days_of_week" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Time Limit (minutes)"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
     <EditText
         android:id="@+id/time_limit_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Time limit in seconds"
+        android:hint="Enter time in minutes"
         android:inputType="number" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start Time"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     <TimePicker
         android:id="@+id/start_time_picker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:timePickerMode="spinner" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="End Time"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     <TimePicker
         android:id="@+id/end_time_picker"

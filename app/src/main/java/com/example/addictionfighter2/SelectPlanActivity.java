@@ -1,12 +1,18 @@
 package com.example.addictionfighter2;
 
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SelectPlanActivity extends AppCompatActivity {
     @Override
@@ -24,7 +30,35 @@ public class SelectPlanActivity extends AppCompatActivity {
             Intent intent = new Intent(this, CustomPlanActivity.class);
             startActivity(intent);
         });
+
+        Spinner appSpinner = findViewById(R.id.app_spinner);
+        // Dummy list of apps, replace with actual app list retrieval logic
+        List<String> appNames = getAppNames();
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, appNames);
+        appSpinner.setAdapter(adapter);
+
+        // Get the selected app name from UsageStatsActivity
+        String selectedAppName = getIntent().getStringExtra("PACKAGE_NAME");
+        if (selectedAppName != null && !selectedAppName.isEmpty()) {
+            int spinnerPosition = adapter.getPosition(selectedAppName);
+            appSpinner.setSelection(spinnerPosition);
+        }
     }
+
+    private List<String> getAppNames() {
+        List<String> appNames = new ArrayList<>();
+        PackageManager packageManager = getPackageManager();
+        List<ApplicationInfo> apps = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
+        for (ApplicationInfo app : apps) {
+            if ((app.flags & ApplicationInfo.FLAG_SYSTEM) == 1) continue;  // Skip system apps
+
+            String label = packageManager.getApplicationLabel(app).toString();
+            appNames.add(label);
+        }
+        return appNames;
+    }
+
+
 
     private void createPlan(String type) {
         Plan plan = new Plan();

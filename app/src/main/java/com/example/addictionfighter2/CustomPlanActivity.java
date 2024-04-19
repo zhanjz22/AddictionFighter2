@@ -38,12 +38,13 @@ public class CustomPlanActivity extends AppCompatActivity {
 
     private void savePlan() {
         DayOfWeek day = DayOfWeek.valueOf(daySpinner.getSelectedItem().toString().toUpperCase());
-        long timeLimit = Long.parseLong(timeLimitInput.getText().toString());
+        // Convert input from minutes to seconds
+        long timeLimitSeconds = Long.parseLong(timeLimitInput.getText().toString()) * 60;
         LocalTime startTime = LocalTime.of(startTimePicker.getHour(), startTimePicker.getMinute());
         LocalTime endTime = LocalTime.of(endTimePicker.getHour(), endTimePicker.getMinute());
 
         Plan plan = new Plan();
-        plan.setDayTime(day, timeLimit);
+        plan.setDayTime(day, timeLimitSeconds);
         plan.setDayBegin(day, startTime);
         plan.setDayEnd(day, endTime);
 

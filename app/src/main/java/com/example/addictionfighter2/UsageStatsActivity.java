@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -171,30 +172,19 @@ public class UsageStatsActivity extends Activity implements OnItemSelectedListen
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            // A ViewHolder keeps references to children views to avoid unneccessary calls
-            // to findViewById() on each row.
             AppViewHolder holder;
 
-            // When convertView is not null, we can reuse it directly, there is no need
-            // to reinflate it. We only inflate a new View when the convertView supplied
-            // by ListView is null.
             if (convertView == null) {
                 convertView = mInflater.inflate(R.layout.usage_stats_item, null);
-
-                // Creates a ViewHolder and store references to the two children views
-                // we want to bind data to.
                 holder = new AppViewHolder();
                 holder.pkgName = (TextView) convertView.findViewById(R.id.package_name);
                 holder.lastTimeUsed = (TextView) convertView.findViewById(R.id.last_time_used);
                 holder.usageTime = (TextView) convertView.findViewById(R.id.usage_time);
                 convertView.setTag(holder);
             } else {
-                // Get the ViewHolder back to get fast access to the TextView
-                // and the ImageView.
                 holder = (AppViewHolder) convertView.getTag();
             }
 
-            // Bind the data efficiently with the holder
             UsageStats pkgStats = mPackageStats.get(position);
             if (pkgStats != null) {
                 String label = mAppLabelMap.get(pkgStats.getPackageName());
@@ -206,8 +196,21 @@ public class UsageStatsActivity extends Activity implements OnItemSelectedListen
             } else {
                 Log.w(TAG, "No usage stats info for package:" + position);
             }
+
+            // Add click listener to the convertView
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(UsageStatsActivity.this, SelectPlanActivity.class);
+                    // Optionally, add extras to the intent
+                    intent.putExtra("PACKAGE_NAME", pkgStats.getPackageName());
+                    startActivity(intent);
+                }
+            });
+
             return convertView;
         }
+
 
         void sortList(int sortOrder) {
             if (mDisplayOrder == sortOrder) {
