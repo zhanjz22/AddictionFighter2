@@ -7,6 +7,8 @@ import androidx.core.app.NotificationManagerCompat;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,11 +29,16 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
     private NotificationManagerCompat nmc;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +79,16 @@ public class MainActivity extends AppCompatActivity {
         TextView motivationTextView = (TextView) findViewById(R.id.motivation);
         motivationTextView.setText(customMessages[index]);
 
+        TextView planDetailsTextView = findViewById(R.id.planDetailsTextView);
+
+        Plan currentPlan = getIntent().getParcelableExtra("selected_plan");
+        if (currentPlan != null) {
+            displayPlanDetails(currentPlan);
+        } else {
+            planDetailsTextView.setText("No plan received."); //not working
+        }
+
+        //scheduleCurfewNotification();
     }
 
     @Override
@@ -105,17 +122,69 @@ public class MainActivity extends AppCompatActivity {
 
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "Testing";
-            String description = "For testing of notifications";
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel("test_channel", name, importance);
+            CharSequence name = getString(R.string.channel_name); // You need to define this in your strings.xml
+            String description = getString(R.string.channel_description); // Define this too
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("YOUR_CHANNEL_ID", name, importance);
             channel.setDescription(description);
-            channel.enableLights(true);
-            channel.enableVibration(true);
+            // Register the channel with the system
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
     }
+
+    private void displayPlanDetails(Plan plan) {
+        TextView planDetailsTextView = findViewById(R.id.planDetailsTextView); // Assume you have a TextView to show plan
+        // Format and set the plan details to TextView
+        planDetailsTextView.setText(formatPlanDetails(plan));
+    }
+
+    private String formatPlanDetails(Plan plan) {
+        StringBuilder details = new StringBuilder();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
+        for (int i = 0; i < plan.timePerDay.length; i++) {
+            if (plan.beginPerDay[i] != null) {
+                details.append("Day ")
+                        .append(i + 1)
+                        .append(": ")
+                        .append(plan.beginPerDay[i].format(dtf))
+                        .append(" to ")
+                        .append(plan.endPerDay[i].format(dtf))
+                        .append(", ")
+                        .append(plan.timePerDay[i] / 3600)
+                        .append(" hrs\n");
+            }
+        }
+        return details.toString();
+    }
+
+    private void scheduleCurfewNotification() {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, CurfewNotificationReceiver.class);
+        intent.setAction("com.example.addictionfighter2.CURFEW_NOTIFICATION");
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // Set the alarm to start at 9 PM
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 21);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        // Ensures the alarm does trigger past events if the app is started after 9 PM
+        if (calendar.before(Calendar.getInstance())) {
+            calendar.add(Calendar.DATE, 1);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        } else {
+            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        }
+    }
+
 
     // Array of custom messages
     String[] customMessages = {

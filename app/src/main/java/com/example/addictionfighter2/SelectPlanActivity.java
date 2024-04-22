@@ -61,6 +61,7 @@ public class SelectPlanActivity extends AppCompatActivity {
 
 
     private void createPlan(String type) {
+        Intent intent = new Intent(SelectPlanActivity.this, MainActivity.class);
         Plan plan = new Plan();
         switch (type) {
             case "cold":
@@ -82,7 +83,10 @@ public class SelectPlanActivity extends AppCompatActivity {
                 plan.setAllEnds(LocalTime.of(21, 0)); // 9 PM
                 break;
         }
-        // TODO pass the plan object to another activity or use it as needed
+        intent.putExtra("selected_plan", plan); // Assuming selectedPlan is your Plan object
+        startActivity(intent);
+        finish(); // Optional, if you want to close the select plan activity
+
     }
 }
 

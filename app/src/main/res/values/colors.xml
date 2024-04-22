@@ -3,4 +3,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="pinkish">#F35087</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimaryVariantDark">#00251a</color>
+    <color name="colorSecondaryDark">#3700B3</color>
+    <color name="colorSecondaryVariantDark">#03DAC5</color>
+
 </resources>

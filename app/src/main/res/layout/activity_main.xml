@@ -60,4 +60,17 @@
         app:layout_constraintEnd_toStartOf="@+id/button_usage_stats"
         app:layout_constraintStart_toEndOf="@+id/button_plan" />
 
+    <TextView
+        android:id="@+id/planDetailsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Plan Details Here"
+        android:textSize="16sp"
+        android:textColor="#FFFFFF"
+        android:padding="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

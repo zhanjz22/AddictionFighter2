@@ -8,6 +8,8 @@
     <string name="display_order_text">Sort by:</string>
     <string name="app_name_label">App</string>
     <string name="last_time_used_label">Last time used</string>
-    <!-- label for usage time -->
+
     <string name="usage_time_label">Usage time</string>
+    <string name="channel_name">Curfew Notifications</string>
+    <string name="channel_description">Notifications to remind you of your 9 PM curfew to reduce screen time.</string>
 </resources>

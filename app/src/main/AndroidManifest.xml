@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AddictionFighter2"
+        android:theme="@style/AppTheme"
         tools:targetApi="31">
 
 
@@ -22,7 +22,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+
         </activity>
+
 
         <activity
             android:name=".UsageStatsActivity" />
@@ -30,9 +33,18 @@
 
         <activity android:name=".CustomPlanActivity" />
 
+        <receiver android:name=".CurfewNotificationReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.example.addictionfighter2.CURFEW_NOTIFICATION"/>
+            </intent-filter>
+        </receiver>
+
 
 
     </application>
+
+
 
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
@@ -49,5 +61,7 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent>
     </queries>
+
+
 
 </manifest>
