@@ -6,6 +6,9 @@
         <item>App name</item>
     </string-array>
     <string-array name="days_of_week">
+        <item>All</item>
+        <item>Weekdays</item>
+        <item>Weekends</item>
         <item>Monday</item>
         <item>Tuesday</item>
         <item>Wednesday</item>

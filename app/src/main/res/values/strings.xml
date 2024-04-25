@@ -12,4 +12,6 @@
     <string name="usage_time_label">Usage time</string>
     <string name="channel_name">Curfew Notifications</string>
     <string name="channel_description">Notifications to remind you of your 9 PM curfew to reduce screen time.</string>
+
+    <string name="wakeup_logo_description">WakeUp logo</string>
 </resources>
