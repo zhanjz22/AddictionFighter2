@@ -1,5 +1,6 @@
 package com.example.addictionfighter2;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,7 +34,12 @@ public class CustomPlanActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         daySpinner.setAdapter(adapter);
 
-        savePlanButton.setOnClickListener(view -> savePlan());
+        savePlanButton.setOnClickListener(view -> {
+            savePlan();
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
     }
 
     private void savePlan() {
