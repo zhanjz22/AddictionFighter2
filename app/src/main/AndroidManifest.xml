@@ -11,12 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:targetApi="31">
+        tools:targetApi="34">
 
 
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,13 +34,21 @@
 
         <activity android:name=".CustomPlanActivity" />
 
-        <receiver android:name=".CurfewNotificationReceiver"
-            android:exported="false">
+        <!--<receiver android:name=".CurfewNotificationReceiver"
+            android:exported="false"
+            android:process=":remote">
             <intent-filter>
                 <action android:name="com.example.addictionfighter2.CURFEW_NOTIFICATION"/>
             </intent-filter>
-        </receiver>
+        </receiver>!-->
 
+        <service
+            android:name=".MonitoringService"
+            android:foregroundServiceType="specialUse"
+            android:exported="false">
+            <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="App usage monitoring"/>
+        </service>
 
 
     </application>
@@ -54,6 +63,10 @@
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions" />
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
+
 
     <queries>
         <intent>

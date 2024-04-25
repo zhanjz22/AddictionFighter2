@@ -12,6 +12,7 @@ import android.app.usage.UsageStatsManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -38,6 +39,16 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity {
 
     private NotificationManagerCompat nmc;
+
+    @Override
+    protected void onStop() {
+        //Intent intent = new Intent(this, CurfewNotificationReceiver.class);
+        //intent.putExtra("NotificationText", "some text");
+        //PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 2 /*doesnt matter*/, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        //AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        //alarmManager.set(AlarmManager.RTC_WAKEUP, 5000, pendingIntent);
+        super.onStop();
+    }
 
 
     @Override
@@ -88,6 +99,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //scheduleCurfewNotification();
+
+        Intent foregroundMonitoring = new Intent(getApplicationContext(), MonitoringService.class);
+        getApplicationContext().startForegroundService(foregroundMonitoring);
     }
 
     @Override
