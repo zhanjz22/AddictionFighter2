@@ -67,23 +67,28 @@ public class SelectPlanActivity extends AppCompatActivity {
             case "cold":
                 // No usage allowed at all
                 plan.setAllTimes(0);
+                plan.setName("Cold Turkey");
                 break;
             case "reduced":
                 // Reduced plan: 30 minutes per day
                 plan.setAllTimes(1800);
+                plan.setName("Reduced");
                 break;
             case "schoolFocus":
                 // School focus: Allowed only on weekends
                 plan.setDayTime(DayOfWeek.SATURDAY, 86400); // Full day in seconds
                 plan.setDayTime(DayOfWeek.SUNDAY, 86400);
+                plan.setName("School Focus");
                 break;
             case "sleep":
                 // Sleep plan: 1 hour per day, not after 9 PM
                 plan.setAllTimes(3600);
                 plan.setAllEnds(LocalTime.of(21, 0)); // 9 PM
+                plan.setName("Sleep");
                 break;
+            default: plan.setName("Custom");
         }
-        intent.putExtra("selected_plan", plan); // Assuming selectedPlan is your Plan object
+        intent.putExtra("selected_plan_name", plan.getName()); // Assuming selectedPlan is your Plan object
         startActivity(intent);
         finish(); // Optional, if you want to close the select plan activity
 

@@ -89,16 +89,15 @@ public class MainActivity extends AppCompatActivity {
         TextView motivationTextView = (TextView) findViewById(R.id.motivation);
         motivationTextView.setText(randomQuote);
 
-        TextView planDetailsTextView = findViewById(R.id.planDetailsTextView);
+        TextView planNameTextView = findViewById(R.id.planNameTextView);
 
-        Plan currentPlan = getIntent().getParcelableExtra("selected_plan");
-        if (currentPlan != null) {
-            displayPlanDetails(currentPlan);
+        // Get the plan name sent from SelectPlanActivity
+        String planName = getIntent().getStringExtra("selected_plan_name");
+        if (planName != null) {
+            planNameTextView.setText("Current plan: " + planName);
         } else {
-            planDetailsTextView.setText("No plan received."); //not working
+            planNameTextView.setText("No plan selected");
         }
-
-        //scheduleCurfewNotification();
 
         Intent foregroundMonitoring = new Intent(getApplicationContext(), MonitoringService.class);
         getApplicationContext().startForegroundService(foregroundMonitoring);
@@ -124,8 +123,8 @@ public class MainActivity extends AppCompatActivity {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "test_channel")
                 .setSmallIcon(android.R.drawable.ic_dialog_info) // Make sure to use a valid icon
-                .setContentTitle("My notification")
-                .setContentText("Hello World!")
+                .setContentTitle("WakeUp")
+                .setContentText("You have turned notifications on!")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);

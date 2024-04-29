@@ -12,6 +12,7 @@ public class Plan implements Parcelable {
     long[] timePerDay; // Time in seconds per day
     LocalTime[] beginPerDay; // Start time per day
     LocalTime[] endPerDay; // End time per day
+    String name;
 
     public Plan() {
         timePerDay = new long[7];
@@ -95,6 +96,10 @@ public class Plan implements Parcelable {
         }
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     // Gets the maximum allowed time for a specific day
     public long getMaxTime(DayOfWeek day) {
         return timePerDay[day.getValue() - 1];
@@ -108,6 +113,10 @@ public class Plan implements Parcelable {
     // Gets the end time for a specific day
     public LocalTime getEnd(DayOfWeek day) {
         return endPerDay[day.getValue() - 1];
+    }
+
+    public String getName () {
+        return name;
     }
 
     // Checks if usage is ok at a specific datetime

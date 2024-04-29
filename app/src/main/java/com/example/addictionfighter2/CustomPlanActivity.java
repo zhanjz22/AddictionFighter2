@@ -7,6 +7,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -36,25 +38,62 @@ public class CustomPlanActivity extends AppCompatActivity {
 
         savePlanButton.setOnClickListener(view -> {
             savePlan();
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
         });
     }
 
     private void savePlan() {
-        DayOfWeek day = DayOfWeek.valueOf(daySpinner.getSelectedItem().toString().toUpperCase());
-        // Convert input from minutes to seconds
-        long timeLimitSeconds = Long.parseLong(timeLimitInput.getText().toString()) * 60;
+        String timeLimitStr = timeLimitInput.getText().toString();
+        if (timeLimitStr.isEmpty()) {
+            Toast.makeText(this, "Please enter a time limit", Toast.LENGTH_SHORT).show();
+            return; // Early return if the input is invalid
+        }
+
+        long timeLimitSeconds = Long.parseLong(timeLimitStr) * 60;
         LocalTime startTime = LocalTime.of(startTimePicker.getHour(), startTimePicker.getMinute());
         LocalTime endTime = LocalTime.of(endTimePicker.getHour(), endTimePicker.getMinute());
 
         Plan plan = new Plan();
-        plan.setDayTime(day, timeLimitSeconds);
-        plan.setDayBegin(day, startTime);
-        plan.setDayEnd(day, endTime);
+        plan.setName("Custom");
 
-        // Optionally, you can send this Plan object to another activity or use it directly
+        String selectedDay = daySpinner.getSelectedItem().toString().toUpperCase();
+        switch (selectedDay) {
+            case "ALL":
+                plan.setAllTimes(timeLimitSeconds);
+                plan.setAllBegins(startTime);
+                plan.setAllEnds(endTime);
+                break;
+            case "WEEKDAYS":
+                for (DayOfWeek day : DayOfWeek.values()) {
+                    if (day != DayOfWeek.SATURDAY && day != DayOfWeek.SUNDAY) {
+                        plan.setDayTime(day, timeLimitSeconds);
+                        plan.setDayBegin(day, startTime);
+                        plan.setDayEnd(day, endTime);
+                    }
+                }
+                break;
+            case "WEEKENDS":
+                plan.setDayTime(DayOfWeek.SATURDAY, timeLimitSeconds);
+                plan.setDayBegin(DayOfWeek.SATURDAY, startTime);
+                plan.setDayEnd(DayOfWeek.SATURDAY, endTime);
+                plan.setDayTime(DayOfWeek.SUNDAY, timeLimitSeconds);
+                plan.setDayBegin(DayOfWeek.SUNDAY, startTime);
+                plan.setDayEnd(DayOfWeek.SUNDAY, endTime);
+                break;
+            default:
+                DayOfWeek day = DayOfWeek.valueOf(selectedDay);
+                plan.setDayTime(day, timeLimitSeconds);
+                plan.setDayBegin(day, startTime);
+                plan.setDayEnd(day, endTime);
+                break;
+        }
+
+        // Transition back to MainActivity
+        Intent intent = new Intent(CustomPlanActivity.this, MainActivity.class);
+        intent.putExtra("selected_plan_name", plan.getName());
+        //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish(); // Close the current activity
     }
+
 }
 

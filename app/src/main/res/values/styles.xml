@@ -12,7 +12,7 @@
         <item name="colorOnSecondary">@android:color/white</item>
 
         <item name="android:statusBarColor" tools:targetApi="l">@color/colorPrimaryVariantDark</item>
-        <!-- Customize your theme here. -->
+
     </style>
 
 </resources>

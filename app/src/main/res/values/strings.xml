@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AddictionFighter2</string>
+    <string name="app_name">WakeUp</string>
 
     <string name="open_app_usage_setting">Open Apps with usage access settings</string>
     <string name="last_time_used">"Last time used: "</string>
@@ -13,5 +13,4 @@
     <string name="channel_name">Curfew Notifications</string>
     <string name="channel_description">Notifications to remind you of your 9 PM curfew to reduce screen time.</string>
 
-    <string name="wakeup_logo_description">WakeUp logo</string>
 </resources>
