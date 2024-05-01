@@ -1,11 +1,14 @@
 package com.example.addictionfighter2;
 
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.pm.ServiceInfo;
 import android.os.Binder;
 import android.os.Build;
@@ -72,10 +75,15 @@ public class MonitoringService extends Service {
             public void handleMessage(@NonNull Message msg) {
                 // TODO Auto-generated method stub
                 super.handleMessage(msg);
+                //if (msg.)
                 if (msg.what == 0)
-                    Toast.makeText(getApplicationContext(), "5 secs has passed", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "5 secs has passed", Toast.LENGTH_SHORT).show();
+                    ;
                 else if (msg.what == 1)
                     Toast.makeText(getApplicationContext(), "Thread dying", Toast.LENGTH_SHORT).show();
+                else if (msg.what == 2)
+                    Toast.makeText(getApplicationContext(),
+                            "You've spent too long in " + (String)msg.obj, Toast.LENGTH_LONG).show();
             }
         };
 
@@ -86,8 +94,27 @@ public class MonitoringService extends Service {
                 {
                     try {
                         Thread.sleep(5000);
-                        Message msg = new Message();
-                        handler.sendEmptyMessage(0);
+                        ActivityManager am = (ActivityManager) getApplicationContext().getSystemService(ACTIVITY_SERVICE);
+                        // The first in the list of RunningTasks is always the foreground task.
+                        ActivityManager.RunningTaskInfo foregroundTaskInfo = am.getRunningTasks(1).get(0);
+                        String foregroundTaskPackageName = foregroundTaskInfo.topActivity.getPackageName();
+                        PackageManager pm = getApplicationContext().getPackageManager();
+                        try {
+                            PackageInfo foregroundAppPackageInfo = pm.getPackageInfo(foregroundTaskPackageName, 0);
+                            String foregroundTaskAppName = foregroundAppPackageInfo.applicationInfo.loadLabel(pm).toString();
+                            Message msg = new Message();
+                            msg.obj = foregroundTaskAppName;
+                            msg.what = 2;
+                            handler.sendMessage(msg);
+                        }
+                        catch (PackageManager.NameNotFoundException nne) {
+                            Message msg = new Message();
+                            msg.obj = foregroundTaskPackageName;
+                            msg.what = 2;
+                            handler.sendMessage(msg);
+                            handler.sendEmptyMessage(0);
+                        }
+                        //handler.sendEmptyMessage(0);
                         if (kill) break;
                     } catch (InterruptedException e) {
                         // TODO Auto-generated catch block
