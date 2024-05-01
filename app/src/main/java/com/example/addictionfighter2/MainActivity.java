@@ -42,14 +42,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        //Intent intent = new Intent(this, CurfewNotificationReceiver.class);
-        //intent.putExtra("NotificationText", "some text");
-        //PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 2 /*doesnt matter*/, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        //AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        //alarmManager.set(AlarmManager.RTC_WAKEUP, 5000, pendingIntent);
         super.onStop();
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

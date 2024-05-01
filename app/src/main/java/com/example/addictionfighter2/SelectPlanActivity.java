@@ -32,9 +32,9 @@ public class SelectPlanActivity extends AppCompatActivity {
         });
 
         Spinner appSpinner = findViewById(R.id.app_spinner);
-        // Dummy list of apps, replace with actual app list retrieval logic
-        List<String> appNames = getAppNames();
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, appNames);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.app_names, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         appSpinner.setAdapter(adapter);
 
         // Get the selected app name from UsageStatsActivity

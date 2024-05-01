@@ -93,7 +93,7 @@ public class MonitoringService extends Service {
                 while(true)
                 {
                     try {
-                        Thread.sleep(5000);
+                        Thread.sleep(30000);
                         ActivityManager am = (ActivityManager) getApplicationContext().getSystemService(ACTIVITY_SERVICE);
                         // The first in the list of RunningTasks is always the foreground task.
                         ActivityManager.RunningTaskInfo foregroundTaskInfo = am.getRunningTasks(1).get(0);
