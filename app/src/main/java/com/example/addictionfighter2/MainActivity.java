@@ -33,11 +33,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        createNotificationChannel();
         setContentView(R.layout.activity_main);
 
+        // Channel setup
+        createNotificationChannel();
         nmc = NotificationManagerCompat.from(this);
 
+        // Consecutive days
         ConsecutiveDayChecker checker = new ConsecutiveDayChecker(this);
         int streak = checker.getStreak();
 
