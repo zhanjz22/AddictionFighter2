@@ -7,12 +7,9 @@ import androidx.core.app.NotificationManagerCompat;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.usage.UsageStats;
-import android.app.usage.UsageStatsManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -20,21 +17,9 @@ import androidx.core.app.ActivityCompat;
 import android.content.pm.PackageManager;
 import androidx.annotation.NonNull;
 import android.widget.Toast;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
-import android.os.Bundle;
-import android.widget.Button;
-import androidx.appcompat.app.AppCompatActivity;
 
 
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         nmc = NotificationManagerCompat.from(this);
+
+        ConsecutiveDayChecker checker = new ConsecutiveDayChecker(this);
+        int streak = checker.getStreak();
 
         Button buttonUsageStats = findViewById(R.id.button_usage_stats);
         buttonUsageStats.setOnClickListener(view -> {
@@ -83,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         TextView motivationTextView = (TextView) findViewById(R.id.motivation);
         motivationTextView.setText(randomQuote);
 
-        TextView planNameTextView = findViewById(R.id.planNameTextView);
+        TextView planNameTextView = findViewById(R.id.plan_name_text);
 
         // Get the plan name sent from SelectPlanActivity
         String planName = getIntent().getStringExtra("selected_plan_name");
@@ -92,6 +80,12 @@ public class MainActivity extends AppCompatActivity {
         } else {
             planNameTextView.setText("No plan selected");
         }
+
+        TextView streakTextView = findViewById(R.id.streak_text);
+        if (streak > 0)
+            streakTextView.setText(String.format("%d day streak, keep it up!", streak));
+        else
+            streakTextView.setText("You haven't made a streak yet.");
 
         Intent foregroundMonitoring = new Intent(getApplicationContext(), MonitoringService.class);
         getApplicationContext().startForegroundService(foregroundMonitoring);
@@ -140,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void displayPlanDetails(Plan plan) {
-        TextView planDetailsTextView = findViewById(R.id.planDetailsTextView); // No text view currently
+        TextView planDetailsTextView = findViewById(R.id.plan_details_text); // No text view currently
         // Format and set the plan details to TextView
         planDetailsTextView.setText(formatPlanDetails(plan));
     }
