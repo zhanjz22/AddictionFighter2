@@ -12,12 +12,14 @@ public class Plan implements Parcelable {
     long[] timePerDay; // Time in seconds per day
     LocalTime[] beginPerDay; // Start time per day
     LocalTime[] endPerDay; // End time per day
+    String packageName;
     String name;
 
     public Plan() {
         timePerDay = new long[7];
         beginPerDay = new LocalTime[7];
         endPerDay = new LocalTime[7];
+        packageName = null;
     }
 
     protected Plan(Parcel in) {
@@ -31,6 +33,7 @@ public class Plan implements Parcelable {
             beginPerDay[i] = beginTime.isEmpty() ? null : LocalTime.parse(beginTime, dtf);
             endPerDay[i] = endTime.isEmpty() ? null : LocalTime.parse(endTime, dtf);
         }
+        packageName = null;
     }
 
     @Override
@@ -98,6 +101,10 @@ public class Plan implements Parcelable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setPackageName(String name) {
+        this.packageName = name;
     }
 
     // Gets the maximum allowed time for a specific day

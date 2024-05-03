@@ -23,6 +23,9 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.ServiceCompat;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 public class MonitoringService extends Service {
     private NotificationManager mNM;
     private Handler handler;
@@ -90,14 +93,25 @@ public class MonitoringService extends Service {
         runner = new Thread(new Runnable(){
             public void run() {
                 // TODO Auto-generated method stub
+                Plan plan = new Plan();
+                plan.setPackageName("com.example.addictionfighter2");
+                plan.setAllTimes(0);
+                plan.setAllBegins(LocalTime.NOON);
+                plan.setAllEnds(LocalTime.NOON);
                 while(true)
                 {
                     try {
-                        Thread.sleep(30000);
+                        Thread.sleep(3000);
                         ActivityManager am = (ActivityManager) getApplicationContext().getSystemService(ACTIVITY_SERVICE);
                         // The first in the list of RunningTasks is always the foreground task.
                         ActivityManager.RunningTaskInfo foregroundTaskInfo = am.getRunningTasks(1).get(0);
                         String foregroundTaskPackageName = foregroundTaskInfo.topActivity.getPackageName();
+
+                        if (!foregroundTaskPackageName.equals(plan.packageName)) continue;
+
+                        if (plan.getBegin(LocalDate.now().getDayOfWeek()).isBefore(LocalTime.now())
+                        && plan.getEnd(LocalDate.now().getDayOfWeek()).isAfter(LocalTime.now()))
+                            continue;
                         PackageManager pm = getApplicationContext().getPackageManager();
                         try {
                             PackageInfo foregroundAppPackageInfo = pm.getPackageInfo(foregroundTaskPackageName, 0);
